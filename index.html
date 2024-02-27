@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container-box">
+        <h3 class="main-heading">Password Generator</h3>
+          <div class="inputs-box d-flex jstify-center">
+            <input id="password" class="passinput" type="text" value="" 
+            readonly>
+            <span class="tooltiptext">Copied 😉</span>
+            </div>
+          <div class="inputs-box d-flex jstify-center"><button onClick="passwordCreator();" class="generate-pass">Generate Password</button></div>
+          <div class="inputs-box d-flex gap-5 jstify-center item-center flex-wrap">
+            <div class="mobile_flex">
+            <label class="d-inlineblock">Password-length</label>
+            <input onChange="passStrength()" class="d-inline" type="range" id="length" name="vol" min="12" max="20" placeholder="Generate your Password">
+             <span id="lengthValue" class="d-inlineblock"></span>
+            </div>
+            <div>
+            <input type="checkbox" name='addnumber' ><label>Add Numbers</label>
+            <input   type="checkbox" name='addchar' ><label>Add characters</label>
+            </div>
+          </div>
+        </div>
+        <script>
+            // likho Javascript
+
+let passStrength = () => {
+    let contLength = document.getElementById("length");
+    let lengthValue = document.getElementById("lengthValue");
+    lengthValue.innerHTML = parseInt(contLength.value);
+    return parseInt(contLength.value);
+  };
+  
+  let password = document.getElementById("password");
+  let btnCopy = document.getElementById("copy");
+  let addNumber = document.querySelector("input[name=addnumber]");
+  let addChar = document.querySelector("input[name=addchar]");
+  
+  let passwordCreator = () => {
+    let passLength = passStrength(); // Get password length
+    let pass = "";
+    let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let numbers = "0123456789";
+    let specChar = "?!@#*&%";
+    let finalChar = characters;
+  
+    //   condition for checkboxes
+    if (addNumber.checked && addChar.checked) {
+      finalChar += numbers + specChar;
+    } else {
+      if (addNumber.checked) {
+        finalChar += numbers;
+      }
+      if (addChar.checked) {
+        finalChar += specChar;
+      }
+    }
+    console.log(finalChar);
+    for (let i = 0; i < passLength; i++) {
+      const randomIndex = Math.floor(Math.random() * finalChar.length);
+      pass += finalChar[randomIndex];
+      password.value = pass;
+    
+    }
+     // Check if numbers are required and if the final password contains a number
+    if (addNumber.checked && !/\d/.test(pass)) {
+      // If numbers are required and not included, add a random number to the password
+      const randomIndex = Math.floor(Math.random() * numbers.length);
+      pass += numbers[randomIndex];
+      password.value = pass;
+    }
+    
+    if(addChar.checked && !/[^A-Za-z 0-9]/g.test(pass)){
+       const randomIndex = Math.floor(Math.random() * specChar.length);
+      pass += specChar[randomIndex];
+      password.value = pass;
+    }
+    
+   
+    // Copy the password
+    let genPass = document.getElementById("password");
+    navigator.clipboard.writeText(genPass.value);
+    let tooltip = document.querySelector(".tooltiptext");
+    tooltip.style.visibility = "visible";
+    setTimeout(function () {
+      tooltip.style.visibility = "hidden";
+    }, 1000);
+  };
+  
+        </script>
+</body>
+</html>
